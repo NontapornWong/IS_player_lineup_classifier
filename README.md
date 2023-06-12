@@ -106,3 +106,112 @@ train, X_train, y_train = scale(train, oversample=True)
 valid, X_val, y_val = scale(valid, oversample=False)
 test, X_test, y_test = scale(test, oversample=False)
 ```
+## Traditional Machine learning 
+### Plot learning curve 
+```python
+def plot_learning_curve(estimator, X, y, train_sizes, cv):
+    train_sizes, train_scores, validation_scores = learning_curve(
+        estimator, X, y, train_sizes=train_sizes, cv=cv, scoring='accuracy'
+    )
+    
+    # Calculate mean and standard deviation of training and validation scores
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    validation_scores_mean = np.mean(validation_scores, axis=1)
+    validation_scores_std = np.std(validation_scores, axis=1)
+    
+    # Plot the learning curve
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_sizes, train_scores_mean, label='Training Score', color='blue')
+    plt.fill_between(
+        train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std,
+        alpha=0.1, color='blue'
+    )
+    plt.plot(train_sizes, validation_scores_mean, label='Validation Score', color='orange')
+    plt.fill_between(
+        train_sizes, validation_scores_mean - validation_scores_std,
+        validation_scores_mean + validation_scores_std, alpha=0.1, color='orange'
+    )
+    plt.title('Learning Curve')
+    plt.xlabel('Training Set Size')
+    plt.ylabel('Accuracy')
+    plt.legend(loc='best')
+    plt.grid(True)
+    plt.show()
+```
+```python
+accuracy_train=[]
+accuracy_val=[]
+accuracy_cross=[]
+
+def data_model(model, k=5):
+    model.fit(X_train, y_train)
+    y_train_pred = model.predict(X_train)
+    y_val_pred = model.predict(X_val)
+    train_accuracy = accuracy_score(y_train, y_train_pred)
+    val_accuracy = accuracy_score(y_val, y_val_pred)
+    print("Training Accuracy:", train_accuracy)
+    print("Validation Accuracy:", val_accuracy)
+    accuracy_train.append(train_accuracy)
+    accuracy_val.append(val_accuracy)
+
+    scores = cross_val_score(model, X_train, y_train, cv=k)
+    print("Cross-Validation Scores:", scores)
+    print("Average Cross-Validation Score:", np.mean(scores))
+    accuracy_cross.append(np.mean(scores))
+
+    train_sizes = np.linspace(0.1, 1.0, 10)  
+    plot_learning_curve(model, X_train, y_train, train_sizes, cv=k)
+```
+```python
+Algorithm=['LogisticRegression','GradientBoostingClassifier','KNeighborsClassifier','RandomForestClassifier',
+           'DecisionTreeClassifie',
+          'GaussianNB','SVC']
+```
+#### Logistic regression
+```python
+Logistic_model=LogisticRegression()
+data_model(Logistic_model)
+```
+#### Random Forest Classifier
+```python
+RFC_model=RandomForestClassifier()
+data_model(RFC_model)
+```
+#### Gradient Boosting Classifier
+```python
+GBC_model=GradientBoostingClassifier()
+data_model(GBC_model)
+```
+#### Decision Tree Classifier
+```python
+DTC_model=DecisionTreeClassifier()
+data_model(DTC_model)
+```
+#### KNeighbors Classifier
+```python
+KNC_model=KNeighborsClassifier()
+data_model(KNC_model)
+```
+#### GaussianNB
+```python
+GNB_model=GaussianNB()
+data_model(GNB_model)
+```
+#### SVC
+```python
+SVC_model=SVC()
+data_model(SVC_model)
+```
+### Accuracy results from 7 models 
+The table below shows the training accuracy, validation accuracy, and average cross-validation score for different algorithms:
+
+| Algorithm                   | Training Accuracy | Validation Accuracy | Average Cross-Validation Score |
+|-----------------------------|-------------------|---------------------|-------------------------------|
+| LogisticRegression          | 0.812500          | 0.843137            | 0.802323                      |
+| GradientBoostingClassifier  | 1.000000          | 0.803922            | 0.932636                      |
+| KNeighborsClassifier        | 1.000000          | 0.745098            | 0.922997                      |
+| RandomForestClassifier      | 1.000000          | 0.803922            | 0.846574                      |
+| DecisionTreeClassifier      | 0.836538          | 0.764706            | 0.759466                      |
+| GaussianNB                  | 0.615385          | 0.607843            | 0.615215                      |
+| SVC                         | 0.855769          | 0.843137            | 0.787921                      |
