@@ -21,7 +21,7 @@ Overall, the EDA stage allowed me to uncover meaningful insights and patterns wi
 
 The dataset contains match logs for the midfielders of Manchester United for the 2022-2023 Premier League season. The provided data includes various performance metrics, expected goals (xG), shot-creating actions (SCA), goal-creating actions (GCA), passing statistics, carrying statistics, and take-ons.
 
-## Performance
+## 🚩Performance
 - Goals (Gls): Number of goals scored
 - Assists (Ast): Number of assists
 - Penalty kicks made (PK): Number of penalty kicks converted
@@ -35,30 +35,30 @@ The dataset contains match logs for the midfielders of Manchester United for the
 - Interceptions (Int): Number of interceptions
 - Blocks: Number of times the player blocked the ball
 
-## Expected Goals (xG)
+## 🚩Expected Goals (xG)
 - Expected Goals (xG): Expected goals, including penalty kicks
 - Non-Penalty xG (npxG): Expected goals excluding penalty kicks
 - Expected Assisted Goals (xAG): Expected goals following a pass that assists a shot
 
-## Shot-Creating Actions (SCA) and Goal-Creating Actions (GCA)
+## 🚩Shot-Creating Actions (SCA) and Goal-Creating Actions (GCA)
 - Shot-Creating Actions (SCA): Offensive actions directly leading to a shot
 - Goal-Creating Actions (GCA): Offensive actions directly leading to a goal
 
-## Passes
+## 🚩Passes
 - Passes Completed (Cmp): Number of passes completed
 - Passes Attempted (Att): Number of passes attempted
 - Pass Completion Percentage (Cmp%): Percentage of passes completed
 - Progressive Passes (PrgP): Passes that move the ball towards the opponent's goal line
 
-## Carries
+## 🚩Carries
 - Carries: Number of times the player controlled the ball with their feet
 - Progressive Carries (PrgC): Carries that move the ball towards the opponent's goal line
 
-## Take-Ons
+## 🚩Take-Ons
 - Take-Ons Attempted (Att.1): Number of attempted take-ons
 - Successful Take-Ons (Succ): Number of successful take-ons
 
-# Machine Learning Implementation
+# 📍 Machine Learning Implementation
 ### Required Libraries
 
 The following Python libraries are required to run the code:
@@ -106,8 +106,8 @@ train, X_train, y_train = scale(train, oversample=True)
 valid, X_val, y_val = scale(valid, oversample=False)
 test, X_test, y_test = scale(test, oversample=False)
 ```
-## Traditional Machine learning 
-### Plot learning curve 
+## 🗼Traditional Machine learning🗼
+#### Plot learning curve 
 ```python
 def plot_learning_curve(estimator, X, y, train_sizes, cv):
     train_sizes, train_scores, validation_scores = learning_curve(
@@ -173,36 +173,50 @@ Algorithm=['LogisticRegression','GradientBoostingClassifier','KNeighborsClassifi
 Logistic_model=LogisticRegression()
 data_model(Logistic_model)
 ```
+![lm](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/f76c34fa-b206-4f7f-bbf8-1a79b8cc8e43)
+
 #### Random Forest Classifier
 ```python
 RFC_model=RandomForestClassifier()
 data_model(RFC_model)
 ```
+![randomforest](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/3fd9dea8-21b9-43de-88bd-29018f7e863b)
+
 #### Gradient Boosting Classifier
 ```python
 GBC_model=GradientBoostingClassifier()
 data_model(GBC_model)
 ```
+![GBC](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/ebd276c2-39fb-4824-b1e2-c5bafc3d073f)
+
 #### Decision Tree Classifier
 ```python
 DTC_model=DecisionTreeClassifier()
 data_model(DTC_model)
 ```
+![DTC](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/fd9942e8-725f-45d9-a7f7-4296cd9fe23d)
+
 #### KNeighbors Classifier
 ```python
 KNC_model=KNeighborsClassifier()
 data_model(KNC_model)
 ```
+![KNN](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/3aaebaca-0080-465a-be54-9ab43d7d1ca9)
+
 #### GaussianNB
 ```python
 GNB_model=GaussianNB()
 data_model(GNB_model)
 ```
+![GNB](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/416fae17-d242-4911-82d3-979cb2affff0)
+
 #### SVC
 ```python
 SVC_model=SVC()
 data_model(SVC_model)
 ```
+![SVC](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/82eeb064-9831-4073-a310-4463e79adb8b)
+
 ### Accuracy results from 7 models 
 The table below shows the training accuracy, validation accuracy, and average cross-validation score for different algorithms:
 
@@ -215,3 +229,167 @@ The table below shows the training accuracy, validation accuracy, and average cr
 | DecisionTreeClassifier      | 0.836538          | 0.764706            | 0.759466                      |
 | GaussianNB                  | 0.615385          | 0.607843            | 0.615215                      |
 | SVC                         | 0.855769          | 0.843137            | 0.787921                      |
+
+### Fine Tuning
+```python
+#Logistic regression
+param_grid = {
+    'penalty': ['l1', 'l2'],
+    'C': [0.01, 0.1, 1, 10, 100]
+}
+logistic_model = LogisticRegression()
+grid_search = GridSearchCV(logistic_model, param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+best_params = grid_search.best_params_
+best_logistic_model = LogisticRegression(**best_params)
+best_logistic_model.fit(X_train, y_train)
+```
+```python
+log_predict = best_logistic_model.predict(X_test)
+print(classification_report(y_test, log_predict))
+```
+##### Logistic regression report 
+
+|           | Precision | Recall | F1-Score | Support |
+|-----------|-----------|--------|----------|---------|
+|     0     |   0.92    |  0.63  |   0.75   |   19    |
+|     1     |   0.82    |  0.97  |   0.89   |   32    |
+|  Accuracy |           |        |   0.84   |   51    |
+| Macro Avg |   0.87    |  0.80  |   0.82   |   51    |
+| Weighted Avg |  0.86   |  0.84  |   0.84   |   51    |
+
+```python
+#KNN
+param_grid = {
+    'n_neighbors': [3, 5, 7],
+    'weights': ['uniform', 'distance'],
+    'p': [1, 2]
+}
+
+knn_model = KNeighborsClassifier()
+grid_search = GridSearchCV(knn_model, param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+best_params = grid_search.best_params_
+best_knn_model = KNeighborsClassifier(**best_params)
+best_knn_model.fit(X_train, y_train)
+```
+```python
+KNN_predict = best_knn_model.predict(X_test)
+print(classification_report(y_test, KNN_predict))
+```
+##### KNN report 
+
+|           | Precision | Recall | F1-Score | Support |
+|-----------|-----------|--------|----------|---------|
+|     0     |   0.65    |  0.58  |   0.61   |   19    |
+|     1     |   0.76    |  0.81  |   0.79   |   32    |
+|  Accuracy |           |        |   0.73   |   51    |
+| Macro Avg |   0.71    |  0.70  |   0.70   |   51    |
+| Weighted Avg |  0.72   |  0.73  |   0.72   |   51    |
+
+```python
+#SVM
+param_grid = {
+    'C': [0.1, 1, 10],
+    'kernel': ['linear', 'rbf', 'poly'],
+    'gamma': ['scale', 'auto']
+}
+SVC_model=SVC()
+grid_search = GridSearchCV(SVC_model, param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+best_params = grid_search.best_params_
+best_svc_model = SVC(**best_params)
+best_svc_model.fit(X_train, y_train)
+```
+```python
+SVC_predict = best_svc_model.predict(X_test)
+print(classification_report(y_test, SVC_predict))
+```
+##### SVC report 
+
+|           | Precision | Recall | F1-Score | Support |
+|-----------|-----------|--------|----------|---------|
+|     0     |   0.80    |  0.42  |   0.55   |   19    |
+|     1     |   0.73    |  0.94  |   0.82   |   32    |
+|  Accuracy |           |        |   0.75   |   51    |
+| Macro Avg |   0.77    |  0.68  |   0.69   |   51    |
+| Weighted Avg |  0.76   |  0.75  |   0.72   |   51    |
+
+## 🗼Implement Neural Network with Tensorflow🗼
+```python
+import tensorflow as tf
+```
+```python
+def plot_hist(history):
+  fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,4))
+  ax1.plot(history.history['loss'], label='loss')
+  ax1.plot(history.history['val_loss'], label='val_loss')
+  ax1.set_xlabel('Epoch')
+  ax1.set_ylabel('Binary crossentropy')
+  ax1.legend()
+  ax1.grid(True)
+
+  ax2.plot(history.history['accuracy'], label='accuracy')
+  ax2.plot(history.history['val_accuracy'], label='val_accuracy')
+  ax2.set_xlabel('Epoch')
+  ax2.set_ylabel('Accuracy')
+  ax2.legend()
+  ax2.grid(True)
+
+  plt.show()
+```
+```python
+def train_model(X_train, y_train, num_nodes, dropout, learning_rate, batch_size, epochs):
+  nn_model = tf.keras.Sequential([
+      tf.keras.layers.Dense(num_nodes, activation='relu', input_shape=(24,)),
+      tf.keras.layers.Dropout(dropout),
+      tf.keras.layers.Dense(num_nodes, activation='relu'),
+      tf.keras.layers.Dropout(dropout),
+      tf.keras.layers.Dense(1, activation='sigmoid')
+  ])
+
+  nn_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate), loss="binary_crossentropy", 
+                    metrics=['accuracy'])
+  history = nn_model.fit(
+    X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=(X_val, y_val), verbose=0)
+  
+  return nn_model, history
+```
+```python
+least_val_loss = float('inf')
+least_loss_model = None
+epochs = 100
+
+for num_nodes in [16,32,64]:
+  for dropout in [0,0.2]:
+    for learning_rate in [0.005, 0.001, 0.01]:
+      for batch_size in [32, 64, 128]:
+        print(f"{num_nodes} nodes, dropout: {dropout}, learning_rate: {learning_rate}, batch_size: {batch_size}")
+        model, history = train_model(X_train, y_train, num_nodes, dropout, learning_rate, batch_size, epochs)
+        plot_hist(history)
+        val_loss, val_accuracy = model.evaluate(X_val, y_val)
+        print("Validation Loss:", val_loss)
+        print("Validation Accuracy:", val_accuracy)
+        if val_loss < least_val_loss:
+          least_val_loss = val_loss
+          least_loss_model = model
+```
+```python
+y_predict = least_loss_model.predict(X_test)
+y_predict = (y_predict > 0.5).astype(int).reshape(-1,)
+```
+```python
+print(classification_report(y_test, y_predict))
+```
+##### Neural Network Report 
+
+|           | Precision | Recall | F1-Score | Support |
+|-----------|-----------|--------|----------|---------|
+|     0     |   1.00    |  0.58  |   0.73   |   19    |
+|     1     |   0.80    |  1.00  |   0.89   |   32    |
+|  Accuracy |           |        |   0.84   |   51    |
+| Macro Avg |   0.90    |  0.79  |   0.81   |   51    |
+| Weighted Avg |  0.87   |  0.84  |   0.83   |   51    |
