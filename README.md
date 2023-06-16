@@ -389,8 +389,15 @@ print(classification_report(y_test, y_predict))
 
 |           | Precision | Recall | F1-Score | Support |
 |-----------|-----------|--------|----------|---------|
-|     0     |   1.00    |  0.58  |   0.73   |   19    |
-|     1     |   0.80    |  1.00  |   0.89   |   32    |
-|  Accuracy |           |        |   0.84   |   51    |
-| Macro Avg |   0.90    |  0.79  |   0.81   |   51    |
-| Weighted Avg |  0.87   |  0.84  |   0.83   |   51    |
+|     0     |   1.00    |  0.65  |   0.79   |   20    |
+|     1     |   0.82    |  1.00  |   0.90   |   31    |
+|  Accuracy |           |        |   0.86   |   51    |
+| Macro Avg |   0.91    |  0.82  |   0.84   |   51    |
+| Weighted Avg |  0.89   |  0.86  |   0.86   |   51    |
+
+##### Best Params
+![image](https://github.com/NontapornWong/IS_player_lineup_classifier/assets/97610480/e759a505-4d80-4b17-baf0-b7d4c8e3f24b)
+2/2 [==============================] - 0s 17ms/step - loss: 0.2946 - accuracy: 0.8627
+Validation Loss: 0.2946270704269409
+Validation Accuracy: 0.8627451062202454
+16 nodes, dropout: 0, learning_rate: 0.001, batch_size: 128
