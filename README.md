@@ -63,7 +63,8 @@ The dataset contains match logs for the midfielders of Manchester United for the
 
 The following Python libraries are required to run the code:
 
-- scikit-learn (version X.X.X)
+- scikit-learn
+- imbalanced-learn
 
 ```python
 from sklearn.linear_model import LogisticRegression
